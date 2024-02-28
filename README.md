@@ -15,9 +15,9 @@ A tool that lets you easily manage git hooks
   | Package                      | Unpacked size | With deps |
   | ---------------------------- | ------------- | --------- |
   | husky v4 `4.3.8`             | `53.5 kB`     | `~1 mB`   |
-  | husky v6 `6.0.0`             | `6.86 kB`     | `6.86 kB` |
+  | husky v8 `8.0.3`             | `6.44 kB`     | `6.44 kB` |
   | pre-commit `1.2.2`           | `~80 kB`      | `~850 kB` |
-  | **simple-git-hooks** `2.2.0` | `10.1 kB`     | `10.1 kB` |
+  | **simple-git-hooks** `2.9.0` | `12.8 kB`     | `12.8 kB` |
 
 ### Who uses simple-git-hooks?
 
@@ -54,7 +54,7 @@ Also, this package allows you to set only one command per git hook.
 If you need multiple verbose commands per git hook, flexible configuration or automatic update of git hooks, please check out the other packages:
 
 - [Lefthook](https://github.com/Arkweid/lefthook)
-- [husky](https://github.com/typicode/husky)
+- [husky](https://typicode.github.io/husky/)
 - [pre-commit](https://github.com/pre-commit/pre-commit)
 
 ## Usage
@@ -99,7 +99,7 @@ If you need multiple verbose commands per git hook, flexible configuration or au
    # [Optional] These 2 steps can be skipped for non-husky users
    git config core.hooksPath .git/hooks/
    rm -rf .git/hooks
-   
+
    # Update ./git/hooks
    npx simple-git-hooks
    ```
@@ -113,6 +113,8 @@ Now all the git hooks are created.
 2. Run `npx simple-git-hooks` **from the root of your project**.
 
 Note for **yarn2** users: Please run `yarn dlx simple-git-hooks` instead of the command above. More info on [dlx](https://yarnpkg.com/cli/dlx)
+
+Note for **yarn1** users: Please run `ynpx simple-git-hooks` instead of the command above. More info on [ynpx](https://npm.io/package/ynpx)
 
 Note that you should manually run `npx simple-git-hooks` **every time you change a command**.
 
@@ -151,6 +153,37 @@ npm uninstall simple-git-hooks
 ```
 
 ## Common issues
+
+### I want to skip git hooks!
+
+You should use `--no-verify` option
+
+```sh
+git commit -m "commit message" --no-verify # -n for shorthand
+```
+
+you can read more about it here https://bobbyhadz.com/blog/git-commit-skip-hooks#skip-git-commit-hooks
+
+
+If you need to bypass hooks for multiple Git operations, setting the SKIP_SIMPLE_GIT_HOOKS environment variable can be more convenient. Once set, all subsequent Git operations in the same terminal session will bypass the associated hooks.
+
+```sh
+# Set the environment variable
+export SKIP_SIMPLE_GIT_HOOKS=1
+
+# Subsequent Git commands will skip the hooks
+git add .
+git commit -m "commit message"  # pre-commit hooks are bypassed
+git push origin main  # pre-push hooks are bypassed
+```
+
+### Skipping Hooks in 3rd party git clients
+
+If your client provides a toggle to skip Git hooks, you can utilize it to bypass the hooks. For instance, in VSCode, you can toggle git.allowNoVerifyCommit in the settings.
+
+If you have the option to set arguments or environment variables, you can use the --no-verify option or the SKIP_SIMPLE_GIT_HOOKS environment variable.
+
+If these options are not available, you may need to resort to using the terminal for skipping hooks.
 
 ### When migrating from `husky` git hooks are not running
 
