@@ -17,7 +17,7 @@ A tool that lets you easily manage git hooks
   | husky v4 `4.3.8`             | `53.5 kB`     | `~1 mB`   |
   | husky v8 `8.0.3`             | `6.44 kB`     | `6.44 kB` |
   | pre-commit `1.2.2`           | `~80 kB`      | `~850 kB` |
-  | **simple-git-hooks** `2.9.0` | `12.8 kB`     | `12.8 kB` |
+  | **simple-git-hooks** `2.10.0` | `11.8 kB`     | `11.8 kB` |
 
 ### Who uses simple-git-hooks?
 
@@ -144,6 +144,12 @@ module.exports = {
 
 If you need to have multiple configuration files or just your-own configuration file, you install hooks manually from it by `npx simple-git-hooks ./my-config.js`.
 
+### Note for `npm` package developers
+
+Please do not add `postinstall: "npx simple-git-hooks"` script in your `package.json`. Or at least remove it before `npm publish`
+
+It causes errors for end users of your package
+
 ### Uninstall simple-git-hooks
 
 > Uninstallation will remove all the existing git hooks.
@@ -212,3 +218,23 @@ validate the value is set:
 should output: `.git/hooks/`
 
 Then remove the `.husky` folder that are generated previously by `husky`.
+
+### I am getting "npx: command not found" error in a GUI git client
+
+This happens when using a node version manager such as `nodenv`, `nvm`, `mise` which require
+init script to provide project-specific node binaries.
+
+Create init script in `~/.simple-git-hooks.rc` that should be executed prior to git hooks.
+Please refer to your node manager documentation for details. For example, for mise, that will
+be:
+
+```sh
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+```
+
+Add `SIMPLE_GIT_HOOKS_RC` global environment variable pointing to that new script. For
+example, on macOS, add this to `~/.zshenv`:
+
+```sh
+export SIMPLE_GIT_HOOKS_RC="$HOME/.simple-git-hooks.rc"
+```
